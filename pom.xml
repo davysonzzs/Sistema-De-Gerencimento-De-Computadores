@@ -72,8 +72,6 @@
                     </execution>
                 </executions>
             </plugin>
-        </plugins>
-        <plugins>
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
@@ -83,5 +81,6 @@
                 </configuration>
             </plugin>
         </plugins>
+
     </build>
 </project>
