@@ -1,10 +1,9 @@
 package com.example.exerciciosaula2;
 
 import java.io.IOException;
-import java.io.InterruptedIOException;
 
 public class ComandoRemoto {
-    static final String psExecPath = "src/main/resources/tools/PsExec.exe";
+    static final String psExecPath = new java.io.File("tools/PsExec.exe").getAbsolutePath();
     public static void bloquearTela(String ipOuNome){
 
         try {
