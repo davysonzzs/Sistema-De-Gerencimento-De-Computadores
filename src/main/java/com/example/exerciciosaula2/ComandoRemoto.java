@@ -7,7 +7,7 @@ public class ComandoRemoto {
     public static void bloquearTela(String ipOuNome){
 
         try {
-            ProcessBuilder pB = new ProcessBuilder(psExecPath, "\\\\" + ipOuNome, "-s", "-accepteula", "rundll32.exe", "user32.dll,LockWorkStation");
+            ProcessBuilder pB = new ProcessBuilder(psExecPath, "\\\\" + ipOuNome, "-accepteula", "rundll32.exe", "user32.dll,LockWorkStation");
             pB.redirectErrorStream(true);
             System.out.println("enviando para " + ipOuNome);
             Process processo = pB.start();
