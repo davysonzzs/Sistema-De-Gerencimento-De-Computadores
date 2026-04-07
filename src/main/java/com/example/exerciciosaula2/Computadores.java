@@ -1,73 +1,71 @@
 package com.example.exerciciosaula2;
 
 
-public class Computadores {
-    public boolean computador1 = false;
-    public boolean computador2 = false;
-    public boolean computador3 = false;
-    int computadorSelecionado = 0;
+import java.util.ArrayList;
+import java.util.List;
 
-    public void Computadores(int computadorSelecionado){
-        this.computadorSelecionado = computadorSelecionado;
+public class Computadores {
+    private List<Computador> comps = new ArrayList<Computador>();
+    private int computadorSelecionado = -1;
+
+    public Computadores(){
+        comps.add(new Computador("comp1", "127.0.0.1"));
+        comps.add(new Computador("comp2", "000.000.000"));
+        comps.add(new Computador("comp3", "000.000.000"));
     };
 
-    public boolean[] mostrarComputadores(){
-        boolean[] comps = {computador1, computador2, computador3};
+    public List<Computador> mostrarComputadores(){
         return comps;
     };
 
-    public boolean ocupar(){
-        if (computadorSelecionado == 1){
-            if (!computador1) {
-                computador1 = true;
-                return computador1;
-            } else {
-                return false;
-            }
-        } else if (computadorSelecionado == 2){
-            if (!computador2) {
-                computador2 = true;
-                return computador2;
-            } else {
-                return false;
-            }
-        } else if (computadorSelecionado == 3) {
-            if (!computador3){
-                computador3 = true;
-                return computador3;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
+    public void setComputadorSelecionado(int indicie){
+        if (indicie >= 0 && indicie < comps.size()){
+            this.computadorSelecionado = indicie;
         }
     }
 
-    public boolean desocupar(){
-        if (computadorSelecionado == 1){
-            if (computador1) {
-                computador1 = false;
-                return computador1;
-            } else {
-                return true;
-            }
-        } else if (computadorSelecionado == 2){
-            if (computador2) {
-                computador2 = false;
-                return computador2;
-            } else {
-                return true;
-            }
-        } else if (computadorSelecionado == 3) {
-            if (computador3){
-                computador3 = false;
-                return computador3;
-            } else {
-                return true;
-            }
-        } else {
+    public int mostrarComputadorSelecionado(){
+        return computadorSelecionado;
+    }
+
+    public Computador mostrarComputadorSelecionadoObjeto() {
+        if (computadorSelecionado >= 0 && computadorSelecionado < comps.size()) {
+            return comps.get(computadorSelecionado);
+        }
+        return null;
+    }
+
+    public boolean ocupar() {
+        Computador comp = mostrarComputadorSelecionadoObjeto();
+        if (comp != null) {
             return false;
         }
+        boolean estaBlock = ComandoRemoto.estaBloqueado(comp.getIp());
+        if (!estaBlock){
+            comp.setEmUso(true);
+            return false;
+        }
+
+        comp.setEmUso(true);
+        return true;
     }
+
+    public boolean desocupar() {
+        Computador comp = mostrarComputadorSelecionadoObjeto();
+        if (comp != null) {
+            return false;
+        }
+        boolean estaBlock = ComandoRemoto.estaBloqueado(comp.getIp());
+
+        if (estaBlock){
+            comp.setEmUso(false);
+            return true;
+        }
+
+        comp.setEmUso(false);
+        return true;
+    }
+
+
 }
 

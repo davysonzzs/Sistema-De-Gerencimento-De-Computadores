@@ -4,12 +4,14 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 
 import java.net.URL;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -30,6 +32,8 @@ public class HelloController implements Initializable {
     public CheckBox checkcomp2;
     @FXML
     public CheckBox checkcomp3;
+    @FXML
+    public Button teste;
 
     Computadores computadores = new Computadores();
 
@@ -58,53 +62,41 @@ public class HelloController implements Initializable {
 
     @FXML
     public void listar(){
-        boolean[] comps = computadores.mostrarComputadores();
+        List<Computador> comps = computadores.mostrarComputadores();
+        Label[] paineis = {comp1, comp2, comp3};
 
-        if (!comps[0]){
-            comp1.setStyle("-fx-background-color: #FF6347");
-        } else {
-            comp1.setStyle("-fx-background-color: #008000");
-        }
-        if (!comps[1]){
-            comp2.setStyle("-fx-background-color: #FF6347");
-        } else {
-            comp2.setStyle("-fx-background-color: #008000");
-        }
-        if (!comps[2]){
-            comp3.setStyle("-fx-background-color: #FF6347");
-        } else {
-            comp3.setStyle("-fx-background-color: #008000");
+        for (int i = 0; i < 3; i++) {
+            if (!comps.get(i).isEmUso()) {
+                paineis[i].setStyle("-fx-background-color: #FF6347;");
+            } else {
+                paineis[i].setStyle("-fx-background-color: #008000;");
+            }
         }
     }
 
     @FXML
     public void ocuparDesocupar(ActionEvent event) {
-        boolean[] comps = computadores.mostrarComputadores();
-
+        int indicie = -1;
         if (checkcomp1.isSelected()){
-            computadores.Computadores(1);
-            if (!comps[0]){
-                computadores.ocupar();
-            } else{
-                computadores.desocupar();
-            }
+            indicie = 0;
+        } else if (checkcomp2.isSelected()) {
+            indicie = 1;
+        } else if (checkcomp3.isSelected()){
+            indicie = 2;
+        } else if (indicie == -1) {
+            System.out.println("selecione 1");
+            return;
         }
-        if (checkcomp2.isSelected()){
-            computadores.Computadores(2);
-            if (!comps[1]){
-                computadores.ocupar();
-            } else{
-                computadores.desocupar();
-            }
+
+        computadores.setComputadorSelecionado(indicie);
+        Computador comp = computadores.mostrarComputadorSelecionadoObjeto();
+
+        if (comp == null || comp.getIp() == null || comp.getIp().isEmpty()){
+            return;
         }
-        if (checkcomp3.isSelected()){
-            computadores.Computadores(3);
-            if (!comps[2]){
-                computadores.ocupar();
-            } else{
-                computadores.desocupar();
-            }
-        }
+        ComandoRemoto.bloquearTela(comp.getIp());
+        computadores.ocupar();
+
         listar();
     }
 }
